@@ -4,26 +4,24 @@
 "  | | | | | | | |\/| ||    / | |
 "  \ \_/ /_| |_| |  | || |\ \ | \__/\
 " (_)___/ \___/\_|  |_/\_| \_| \____/
+"
 " PLUGINS
 
 call plug#begin('~/.config/nvim/plugged')
+
 " plugins
 Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/goyo.vim'
 Plug 'vim-airline/vim-airline'
-Plug 'Chiel92/vim-autoformat'
 Plug 'w0rp/ale'
-Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'python-mode/python-mode', {'branch': 'develop'}
+Plug 'mattn/emmet-vim'
 
 " colorschemes
-Plug 'acarapetis/vim-colors-github'
-Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
-Plug 'sickill/vim-monokai'
-Plug 'junegunn/seoul256.vim'
+Plug 'vim-airline/vim-airline-themes'
+" Plug 'morhetz/gruvbox'
+" Plug 'altercation/vim-colors-solarized'
+Plug 'patstockwell/vim-monokai-tasty'
 
 call plug#end()
 
@@ -36,11 +34,9 @@ let g:netrw_liststyle=3
 
 " GENERAL
 " enable syntax processing and add colorscheme
-" change theme based on time of day
-syntax enable
-colorscheme gruvbox
-set background=dark
-let g:airline_theme='gruvbox'
+
+let g:airline_theme=''
+" let g:solarized_termcolors=256
 " enable true color
 if (empty($TMUX))
         if(has("nvim"))
@@ -50,29 +46,23 @@ if (empty($TMUX))
                 set termguicolors
         endif
 endif
-" gruvbox setup
-g:gruvbox_contrast_dark=medium
-g:gruvbox_contrast_light=hard
+
+syntax enable
+set background=dark
+
+let g:vim_monokai_tasty_italic = 1
+colorscheme vim-monokai-tasty
+let g:airline_theme='monokai_tasty'
 
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger="<cr>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
 
 " enable line numbering
 set number relativenumber
 
 " open horizontal pane to edit .vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-
-" enable autocomplete
-set wildmode
 
 " tabs and spaces
 set tabstop=4
@@ -82,7 +72,7 @@ set expandtab
 " ui
 set showcmd
 filetype indent on
-set wildmenu
+
 
 " highlight matching parentheses
 set showmatch
@@ -99,7 +89,6 @@ nnoremap <left> <nop>
 nnoremap <right> <nop>
 nnoremap <down> <nop>
 
-"inoremap <backspace> <nop>
 " move vertically by visual line
 nnoremap j gj
 nnoremap k gk
@@ -108,6 +97,7 @@ nnoremap B ^
 nnoremap E $
 vnoremap B ^
 vnoremap E $
+
 " autoclosing brackets
 noremap " ""<left>
 inoremap ' ''<left>
@@ -116,8 +106,7 @@ inoremap [ []<left>
 inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
-" escape key
-imap <`> <Esc>
+
 " swithing panes
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
@@ -127,5 +116,19 @@ nnoremap <c-l> <c-w>l
 " SHORTCUTS
 " toggle goyo
 noremap <leader>g :Goyo<CR>
-" autoformatter
-noremap <leader>f :Autoformat<CR>
+
+" ale fix
+noremap <leader>f :ALEFix<CR>
+" ale completion
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\   'python': ['pep8'],
+\   'html' : ['prettier'],
+\   'css' : ['prettier'],
+\}
+let g:ale_lint_on_insert_leave=1
+
+" emmet
+let g:user_emmet_leader_key='<C-E>'
+let g:user_emmet_complete_tag=1
