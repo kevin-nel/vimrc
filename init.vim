@@ -8,6 +8,7 @@
 
 
 let mapleader = ";"
+
 " PLUGINS
 
 call plug#begin('~/.config/nvim/plugged')
@@ -15,11 +16,8 @@ call plug#begin('~/.config/nvim/plugged')
 " plugins
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'w0rp/ale', {'for': 'python'}
-Plug 'mattn/emmet-vim'
 
 " colorschemes
 Plug 'vim-airline/vim-airline-themes'
@@ -29,12 +27,25 @@ Plug 'patstockwell/vim-monokai-tasty'
 
 call plug#end()
 
-" python issues fixer (macosx)
-let g:python_host_prog='/Users/kevinnel/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog='/Users/kevinnel/.pyenv/versions/neovim3/bin/python'
+" use system clipboard
+set clipboard=unnamed
+
+" set working dir to current file
+set autochdir
+
+" python issues fixer (macos)
+""let g:python_host_prog='/Users/kevinnel/.pyenv/versions/neovim2/bin/python'
+""let g:python3_host_prog='/Users/kevinnel/.pyenv/versions/neovim4/bin/python'
+" windows
+let g:python_host_prog='C:\Python27\'
+let g:python3_host_prog='C:\Users\Kevin Nel\AppData\Local\Programs\Python\Python37\'
+" linux
+""let g:python_host_prog='/Users/kevinnel/.pyenv/versions/neovim2/bin/python'
+""let g:python3_host_prog='/Users/kevinnel/.pyenv/versions/neovim3/bin/python'
 
 " tree file viewer
 let g:netrw_liststyle=3
+noremap <leader>e :Vexplore<CR>
         
 " GENERAL
 
@@ -52,17 +63,17 @@ endif
 syntax enable
 set background=dark
 
-colorscheme Neosolarized 
+colorscheme gruvbox 
 let g:solarized_termcolors=256
-let g:airline_theme='solarized'
+let g:airline_theme='gruvbox'
 let g:airline_powerline_fonts = 0
 
 " VIMr
-if has('gui_vimr')
+if has('gui_vimr') || has('gui_enabled')
     syntax enable
-    colorscheme Neosolarized 
+    colorscheme gruvbox 
     set background=dark
-    let g:airline_theme='solarized'
+    let g:airline_theme='gruvbox'
 endif
 
 " make sure filetype is detected
@@ -83,8 +94,8 @@ set nocompatible
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " tabs and spaces
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
-
+set tabstop=4 softtabstop=0  shiftwidth=4 smarttab
+autocmd Filetype python set expandtab
 " ui
 set showcmd
 filetype indent on
@@ -144,9 +155,6 @@ nnoremap <c-l> <c-w>l
 " toggle goyo
 noremap <leader>g :Goyo<CR>
 
-" FZF
-let g:fzf_layout = { 'window': 'vsplit enew' }
-
 " easy align
 " Start interactive EasyAlign in visual mode 
 xmap ga <Plug>(EasyAlign)
@@ -169,10 +177,10 @@ let g:ale_lint_on_insert_leave=1
 let g:user_emmet_leader_key='<C-e>'
 let g:user_emmet_complete_tag=1
 
-"livereload notes tufte css
+" COMPILE SCRIPTS
+" livereload notes tufte css
 autocmd filetype markdown noremap <leader>c :w <bar> :!pandoc % --mathjax --css "https://cdnjs.cloudflare.com/ajax/libs/tufte-css/1.4/tufte.min.css" -s -o %:r.html<CR>
-autocmd filetype markdown noremap <leader>p :w <bar> :!pandoc % --mathjax --css "https://cdnjs.cloudflare.com/ajax/libs/tufte-css/1.4/tufte.min.css" -s -o %:r.html<CR> <bar> :!open -a Firefox %:r.html <CR>
-
+autocmd filetype markdown noremap <leader>p :w <bar> :!pandoc % --mathjax --css "https://cdnjs.cloudflare.com/ajax/libs/tufte-css/1.4/tufte.min.css" -s -o %:r.html<CR> <bar> :!firefox %:r.html <CR>
 
 " LaTeX
 autocmd filetype tex,latex noremap <leader>c :w <bar> :!pdflatex % -o %:r.pdf<CR>
@@ -182,19 +190,19 @@ autocmd filetype tex,latex noremap <leader>p :w <bar> :!pdflatex % -o %:r.pdf<CR
 " snippets 
 " Latex
 " math
-autocmd Filetype tex,latex,markdown inoremap ;frac \frac{<++>}{<++>}
-autocmd Filetype tex,latex,markdown inoremap ;int \int_{<++>}^{<++>}
-autocmd Filetype tex,latex,markdown inoremap ;sum \sum_{<++>}^{<++>}
+autocmd Filetype tex,latex,markdown inoremap ;frac      \frac{<++>}{<++>}
+autocmd Filetype tex,latex,markdown inoremap ;int       \int_{<++>}^{<++>}
+autocmd Filetype tex,latex,markdown inoremap ;sum       \sum_{<++>}^{<++>}
 
 autocmd Filetype tex,latex,markdown  inoremap $ $$<left>
 " formatting
-autocmd Filetype tex,latex  inoremap ;doc \documentclass[a4page, 12pt]{article}<Enter><++><Enter>\begin{document}<Enter><++><Enter>\end{document}
-autocmd Filetype tex,latex  inoremap ;sec \section{<++>}<Enter><Tab>
-autocmd Filetype tex,latex  inoremap ;sub \subsection{<++>}<Enter><Tab>
-autocmd Filetype tex,latex  inoremap ;eq \begin{equation}<Enter><Tab><++><Enter><BS>\label{eq:<++>}<Enter>\end{equation}
-autocmd Filetype tex,latex  inoremap ;fig \begin{figure}[h]<Enter><Tab>\centering<Enter>\includegraphics[width=0.7\textwidth]{<++>}<Enter>\caption{<++>}<Enter>\label{fig:<++>}<Enter><BS>\end{figure}
-autocmd Filetype tex,latex  inoremap ;pb \pagebreak<Enter>
-autocmd Filetype tex,latex  inoremap ;toc \tableofcontents<Enter>
-autocmd Filetype tex,latex  inoremap ;pkg \usepackage{<++>}<Enter>
+autocmd Filetype tex,latex  inoremap ;doc       \documentclass[a4page, 12pt]{article}<Enter><++><Enter>\begin{document}<Enter><++><Enter>\end{document}
+autocmd Filetype tex,latex  inoremap ;sec       \section{<++>}<Enter><Tab>
+autocmd Filetype tex,latex  inoremap ;sub       \subsection{<++>}<Enter><Tab>
+autocmd Filetype tex,latex  inoremap ;eq        \begin{equation}<Enter><Tab><++><Enter><BS>\label{eq:<++>}<Enter>\end{equation}
+autocmd Filetype tex,latex  inoremap ;fig       \begin{figure}[h]<Enter><Tab>\centering<Enter>\includegraphics[width=0.7\textwidth]{<++>}<Enter>\caption{<++>}<Enter>\label{fig:<++>}<Enter><BS>\end{figure}
+autocmd Filetype tex,latex  inoremap ;pb        \pagebreak<Enter>
+autocmd Filetype tex,latex  inoremap ;toc       \tableofcontents<Enter>
+autocmd Filetype tex,latex  inoremap ;pkg       \usepackage{<++>}<Enter>
 
 
