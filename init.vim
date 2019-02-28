@@ -33,6 +33,10 @@ set clipboard=unnamed
 " set working dir to current file
 set autochdir
 
+" enable mouse
+set mouse=a
+
+
 " python issues fixer (macos)
 ""let g:python_host_prog='/Users/kevinnel/.pyenv/versions/neovim2/bin/python'
 ""let g:python3_host_prog='/Users/kevinnel/.pyenv/versions/neovim4/bin/python'
